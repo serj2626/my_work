@@ -1,0 +1,36 @@
+<nav class="py-2 bg-transparent border-bottom">
+    <div class="container ">
+        <div class="d-flex flex-row justify-content-between  py-4">
+            <div>
+                <a class="text-decoration-none font-monospace fs-4 text-warning rounded-4 bg-white py-3 px-3 border-3 border-warning"
+                   href="{% url 'home' %}">MyWork</a>
+            </div>
+
+
+            <div class="">
+                <ul class="d-flex flex-row text-decoration-none align-items-center" style="list-style: none">
+                    <li class=" pe-5">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house fa-xl text-warning"></i></a>
+                    </li>
+                    <li class=" pe-5">
+                        <a class="nav-link" href=""><i class="fa-solid fa-comment fa-xl text-warning"></i></a>
+                    </li>
+                    <li class=" ">
+                        <a class="text-decoration-none px-2 btn btn-outline-warning" href="{% url 'vakancies' %}">Вакансии</a>
+                    </li>
+                    <li class=" px-3  dropdown">
+                        <a class=" dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                           aria-haspopup="true" aria-expanded="false"><i
+                                class="fa-solid fa-user-circle fa-2xl text-warning"></i></a>
+
+                        <div class="dropdown-menu">
+                            {% include 'include/menu.html' %}
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</nav>

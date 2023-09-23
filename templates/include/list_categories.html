@@ -1,0 +1,13 @@
+<h4 class="text-center text-success border-bottom">Категории </h4>
+<ul>
+    {% for cat in categories %}
+        {% if cat.is_child_node == False %}
+            <li class="text-warning">{{ cat.title }}</li>
+        {% else %}
+            <ul>
+                <a class="text-decoration-none" href=""><li class="text-primary">{{ cat.title }}</li></a>
+            </ul>
+        {% endif %}
+    {% endfor %}
+</ul>
+

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Мои резюме{% endblock title %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+
+
+    <div class="container-fluid mt-5 font-monospace">
+        <div class="row my-3">
+            <div class="col-md-3">
+
+
+            </div>
+
+            <div class="col-md-7">
+                <div class="container">
+
+                    {% if all_resume %}
+                        {% for resume in all_resume %}
+
+                            <div class="d-flex flex-row pt-3 justify-content-between border-bottom mb-3">
+                                <div class="d-flex flex-column">
+                                    <a class="text-decoration-none"
+                                       href="{% url 'users:account' resume.user.account.slug %}"><h5
+                                            class="text-danger">
+                                        {{ resume.user.account.fullname }}</h5>
+                                    </a>
+
+                                    <div><h6>Должность: {{ resume.job_title }}</h6></div>
+                                    <div>ЗП: {{ resume.min_price }} - {{ resume.max_price }} руб.</div>
+
+                                </div>
+
+
+                                <div class="d-flex flex-column">
+                                    <a class="text-decoration-none py-2 btn btn-primary border-2 border-white"
+                                       href="{% url 'resume_detail' resume.pk %}">Смотреть</a>
+                                    <a class="text-decoration-none py-2 btn btn-warning my-2 border-2 border-white"
+                                       href="{% url 'resume_detail' resume.pk %}">В избранное</a>
+                                    <a class="text-decoration-none py-2 btn btn-danger  border-2 border-white"
+                                       href="{% url 'resume_detail' resume.pk %}">Убрать из избранного</a>
+                                </div>
+
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>Нет опубликованных резюме</p>
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    {% include 'include/footer.html' %}
+
+{% endblock content %}

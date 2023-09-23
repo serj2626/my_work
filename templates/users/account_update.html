@@ -1,0 +1,74 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <div class="container mb-1">
+        <div class="row justify-content-center mt-4">
+
+            <div class="col-md-3">
+
+                <img src="{{ object.image.url }}" alt="" width="200px" height="200px" class="rounded-circle">
+                <h6 class=" text-warning my-2 ">{{ object.user.get_type_display }}</h6>
+                {% if object.user.type == 'person' %}
+                    <div class="d-flex flex-row ">
+                        <div><i class="fa-solid fa-user fa-sm text-warning me-2"></i></div>
+                        <div>{{ object.fullname }}</div>
+                    </div>
+                {% else %}
+                    <div class="d-flex flex-row ">
+                        <div><i class="fa-solid fa-building fa-sm text-warning me-2"></i></div>
+                        <div>{{ object.fullname }}</div>
+                    </div>
+                {% endif %}
+
+                <div class="d-flex flex-row ">
+                    <div><i class="fa-solid fa-phone fa-sm text-warning me-2"></i></div>
+                    <div>{{ object.user.username }}</div>
+                </div>
+                <div class="d-flex flex-row ">
+                    <div><i class="fa-solid fa-envelope fa-sm text-warning me-2"></i></div>
+                    <div>{{ object.user.email }}</div>
+                </div>
+                {% if object.user.type == 'person' %}
+                    <div class="d-flex flex-row ">
+                        <div><i class="fa-solid fa-file fa-sm text-warning me-2"></i></div>
+                        <div>{{ object.data_client }} лет</div>
+                    </div>
+                {% else %}
+                    <div class="d-flex flex-row ">
+                        <div><i class="fa-solid fa-file fa-sm text-warning me-2"></i></div>
+                        <div>{{ object.data_client }} ИНН</div>
+                    </div>
+                {% endif %}
+                <div class="d-flex flex-row ">
+                    <div><i class="fa-solid fa-earth-europe fa-sm text-warning me-2"></i></div>
+                    <div>{{ object.country.name }}</div>
+                </div>
+
+            </div>
+
+            <div class="col-md-5 mx-auto m">
+
+                {% if object.user.type == 'person' %}
+                    <h3 class="text-center text-warning">Личные данные</h3>
+                {% else %}
+                    <h3 class="text-center text-warning">Данные компании</h3>
+                {% endif %}
+                <form action="" class=" text-center mt-5" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-outline-warning">Обновить данные</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        {% include 'include/footer.html' %}
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% if request.user.is_authenticated %}
+
+    {% if request.user.type == 'person' %}
+        <p class="text-center">{{ user.get_type_display }}</p>
+        <a class="dropdown-item"
+           href="{% url 'users:account' user.account.slug %}">{{ user.email }}
+        </a>
+        <a class="dropdown-item" href="{% url 'resume_list' %}">Мои резюме</a>
+        <a class="dropdown-item" href="#">Сообщения</a>
+        <a class="dropdown-item" href="#">Уведомления</a>
+        <a class="dropdown-item" href="{% url 'users:favorites' request.user.account.slug %}">Избранное</a>
+        <div class="dropdown-divider border-white"></div>
+        <a class="dropdown-item" href="{% url 'users:logout' %}">Выйти</a>
+    {% elif  request.user.type == 'company' %}
+        <p class="text-center">{{ user.get_type_display }}</p>
+        <a class="dropdown-item"
+           href="{% url 'users:account' user.account.slug %}">{{ user.email }}</a>
+        <a class="dropdown-item" href="{% url 'vacancies_list' %}">Мои вакансии</a>
+        <a class="dropdown-item" href="#">Сообщения</a>
+        <a class="dropdown-item" href="#">Уведомления</a>
+        <a class="dropdown-item" href="{% url 'users:favorites' request.user.account.slug %}">Избранное</a>
+        <div class="dropdown-divider border-white"></div>
+        <a class="dropdown-item" href="{% url 'users:logout' %}">Выйти</a>
+    {% else %}
+        <p class="text-center">Админ</p>
+        <a class="dropdown-item"
+           href="">{{ user.email }}</a>
+        <a class="dropdown-item" href="admin/">Админ-панель</a>
+        <hr>
+        <a class="dropdown-item" href="{% url 'users:logout' %}">Выйти</a>
+    {% endif %}
+{% else %}
+    <a class="dropdown-item" href="{% url 'users:login' %}">Авторизация</a>
+    <a class="dropdown-item" href="{% url 'users:signup' %}">Регистрация</a>
+{% endif %}

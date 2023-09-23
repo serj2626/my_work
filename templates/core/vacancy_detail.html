@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Вакансия{% endblock title %}
+{% load crispy_forms_tags %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'core/css/resume.css' %}">
+{% endblock style %}
+
+{% block content %}
+    <div class="container font-monospace mt-3 ">
+        <div class="row justify-content-center">
+
+            <h2 class="text-center text-warning my-3">Вакансия {{ vacancy.job_title }}</h2>
+            <div class="row mt-5 ">
+                <div class="col-md-8">
+
+
+                    <div class="card border-3 border-white">
+                        <div class="d-flex flex-row fs-6 ">
+                            <div class=" text-dark px-2 py-2 rounded-end-2">
+                                <p>Компания: {{ vacancy.company.account.fullname }}</p>
+                                <hr>
+                                <p>ИНН: {{ vacancy.company.account.data_client }}</p>
+                                <hr>
+                                <p>Телефон: {{ vacancy.company.username }}</p>
+                                <hr>
+                                <p>Почта: {{ vacancy.company.email }}</p>
+                                <hr>
+                                <p>Страна: {{ vacancy.company.account.get_country_display }}</p>
+                                <hr>
+                                <p>Должность: {{ vacancy.job_title }}</p>
+                                <hr>
+                                <p>Зарплата: от {{ vacancy.min_price }} до {{ vacancy.max_price }} руб.</p>
+                                <hr>
+                                <p>Требуемый опыт: {{ vacancy.required_experience }}</p>
+                                <p>Статус <span
+                                        class="p-2 bg-warning rounded-pill text-white fs-6">{{ vacancy.get_status_vacancy_display }}</span>
+                                </p>
+                            </div>
+                            {% if request.user == vacancy.company %}
+                                <div class="mt-3 mx-auto">
+                                    <a href="{% url 'responses' %}" class="btn btn-info py-2 ">
+                                        Кол-во откликов {{ vacancy.followers.count }}</a>
+                                </div>
+
+                            {% elif request.user in vacancy.followers_set.all %}
+                                <div class="mt-3"><a href="{% url 'add_follower' vacancy.id %}"
+                                                     class="btn btn-info py-2 ">Удалить отклик</a></div>
+                            {% else %}
+                                <div class="mx-auto">
+                                    <div class="mt-3 mx-auto">
+                                        <a href="#" class="btn btn-success py-2">
+                                           В Избранное</a>
+                                    </div>
+                                    <div class="mx-auto">
+                                        <a href="#" class="btn btn-info py-2 my-3">
+                                            Кол-во откликов {{ vacancy.followers.count }}</a>
+                                    </div>
+                                    <div>
+                                        <a type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                           data-bs-target="#exampleModal">
+                                            Откликнуться
+                                        </a>
+
+                                        <!-- Модальное окно -->
+                                        <div class="modal fade border-2 border-white" id="exampleModal" tabindex="-1"
+                                             aria-labelledby="exampleModalLabel"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog ">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-warning" id="exampleModalLabel">
+                                                            Оставить
+                                                            отклик?</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Закрыть"></button>
+                                                    </div>
+                                                    <div class="modal-footer mx-auto ">
+                                                        <form action="{% url 'add_follower' vacancy.id %}"
+                                                              method="post">
+                                                            {% csrf_token %}
+                                                            <div class="text-center">
+                                                                <label for="resume" class="fs-5">Выбрать резюме</label>
+                                                                <select class="form-control my-3" id="resume"
+                                                                        name="resume">
+
+                                                                    {% for res in request.user.all_resume.all %}
+                                                                        <option class="text-center"
+                                                                                value="{{ res.id }}">{{ res.job_title }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                                <button type="button"
+                                                                        class="btn btn-danger border-white mx-3"
+                                                                        data-bs-dismiss="modal">Отмена
+                                                                </button>
+                                                                <button type="submit" class="btn btn-success py-2 ">
+                                                                    Откликнуться
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="card-footer">
+                            <button class="accordion">Описание</button>
+                            <div class="panel">
+                                {% if vacancy.description %}
+                                    <div class="py-2"><p
+                                            class="text-info text-center">{{ vacancy.description|safe }}</p>
+                                    </div>
+                                {% else %}
+                                    <p>Информация отсутствует</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+
+                        <div class="card-footer">
+                            <button class="accordion">Обязанности</button>
+                            <div class="panel">
+                                {% if vacancy.charge %}
+                                    <div class="py-2"><p class="text-info text-center">{{ vacancy.charge|safe }}</p>
+                                    </div>
+                                {% else %}
+                                    <p>Информация отсутствует</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button class="accordion">Ключевые навыки</button>
+                            <div class="panel">
+                                {% if vacancy.stack.all %}
+                                    <div class="py-2"><p
+                                            class="text-info text-center">{{ vacancy.stack.all|join:'  ' }}</p>
+                                    </div>
+                                {% else %}
+                                    <p>Информация отсутствует</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="accordion">Условия</button>
+                            <div class="panel">
+                                {% if vacancy.conditions %}
+                                    <div class="py-2"><p class="text-info text-center">{{ vacancy.conditions|safe }}</p>
+                                    </div>
+                                {% else %}
+                                    <p>Информация отсутствует</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+
+                        <div class="card-footer">
+                            <p class="text-center fs-6">Дата публикации: {{ vacancy.date|date:"d M Y" }} года</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="d-flex flex-column mx-3">
+                        <a href="{% url 'vacancies_list' %}" class="btn btn-light border-2 border-white my-3">Мои
+                            вакансии</a>
+                        <a href="" class="btn btn-primary my-3 border-2 border-white">Отклики</a>
+                        <a href="{% url 'vacancies_update'  vacancy.pk %}"
+                           class="btn btn-success my-3 border-2 border-white">Редактировать</a>
+                        {% if vacancy.status_vacancy == 'active' %}
+                            <a href="{% url 'vacancies_to_archive' vacancy.pk %}"
+                               class="btn btn-secondary my-3 border-2 border-white">Поместить
+                                в архив</a>
+                        {% else %}
+                            <a href="{% url 'vacancies_to_active'  vacancy.pk %}"
+                               class="btn btn-secondary my-3 border-2 border-white">Перенести
+                                из архива</a>
+                        {% endif %}
+
+                        <a type="button" class="btn btn-danger my-2 border-2 border-white" data-bs-toggle="modal"
+                           data-bs-target="#exampleModal1">
+                            Удалить
+                        </a>
+
+                        <!-- Модальное окно -->
+                        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-warning" id="exampleModalLabel1">Удалить
+                                            вакансию?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Закрыть"></button>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <a type="button" class="btn btn-secondary border-white" data-bs-dismiss="modal">Отмена
+                                        </a>
+                                        <a href="{% url 'vacancies_delete' vacancy.pk %}" type="button"
+                                           class="btn btn-danger border-white">Удалить</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'core/js/resume.js' %}"></script>
+    {% include 'include/footer.html' %}
+{% endblock content %}

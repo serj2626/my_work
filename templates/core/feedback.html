@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container font-monospace my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 ">
+                <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                    <fieldset>
+                        <h2 class="text-center text-warning">Обратная связь</h2>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1" class="form-label mt-4">Почта</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" name="email"
+                                   aria-describedby="emailHelp" placeholder="Введите свою почту">
+                            <small id="emailHelp" class="form-text text-muted">Мы никогда не передадим вашу электронную почту кому-либо еще.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1" class="form-label mt-4">Имя</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1" name="name"
+                                   placeholder="Введите свое имя" autocomplete="off">
+                        </div>
+
+                         <div class="form-group">
+                            <label for="exampleInputPassword1" class="form-label mt-4">Тема обращения</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1" name="theme"
+                                   placeholder="Введите тему обращения" autocomplete="off">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleTextarea" class="form-label mt-4">Текст обращения</label>
+                            <textarea class="form-control" id="exampleTextarea" rows="3" name="text"  placeholder="Введите текст обращения"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="formFile" class="form-label mt-4">Прикрепить скриншот</label>
+                            <input class="form-control" type="file" id="formFile" name="image">
+                        </div>
+
+
+                        <button type="submit" class="btn btn-success my-3">Отправить</button>
+                    </fieldset>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    {% include 'include/footer.html' %}
+{% endblock content %}

@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Вакансии{% endblock title %}
+{% load crispy_forms_tags %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'core/css/resume.css' %}">
+{% endblock style %}
+
+{% block content %}
+    <div class="container font-monospace mt-3 ">
+        <div class="row justify-content-center">
+
+            <h2 class="text-center text-warning my-3">Резюме {{ resume.job_title }}</h2>
+            <div class="col-md-8">
+                <div class="card border-3 border-white my-2">
+                    <div class="card-img d-flex flex-row fs-6 ">
+                        <div><img src="{{ resume.image.url }}" height="400px" width="auto" class="rounded-3 "></div>
+                        <div class="mx-auto mt-3">
+                            <p>Имя: {{ resume.user.account.fullname }}</p>
+                            <p>Страна: {{ resume.user.account.get_country_display }}</p>
+                            <p>Возраст: {{ resume.user.account.data_client }} лет</p>
+                            <p>Телефон: {{ resume.user.username }}</p>
+                            <p>Почта: {{ resume.user.email }}</p>
+                            <p>Должность: {{ resume.job_title }}</p>
+                            <p>Зарплата: от {{ resume.min_price }} до {{ resume.max_price }} руб.</p>
+                            <p>Статус <span
+                                    class="p-2 bg-warning rounded-pill text-white fs-6">{{ resume.get_status_resume_display }}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="accordion">Опыт работы</button>
+                        <div class="panel">
+                            {% if resume.skills %}
+                                <div class="text-center py-3"><p class="text-warning">{{ resume.skills|safe }}</p></div>
+                            {% else %}
+                                <p>Информация отсутствует</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <div class="card-footer">
+                        <button class="accordion">Навыки</button>
+                        <div class="panel text-warning">
+                            {% if  resume.skills %}
+                                <div class="text-start py-3"><p class="text-warning">{{ resume.skills|safe }}</p></div>
+                            {% else %}
+                                <p>Информация отсутствует</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="accordion">Стек технологий</button>
+
+                        <div class="panel">
+                            {% if  resume.stack.all %}
+                                <div class="text-center py-3"><p
+                                        class="text-warning">{{ resume.stack.all|join:',  ' }}</p></div>
+                            {% else %}
+                                <p>Информация отсутствует</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="accordion">О себе</button>
+                        <div class="panel">
+                            {% if resume.description %}
+                                <p>{{ resume.description|safe }}</p>
+                            {% else %}
+                                <p>Информация отсутствует</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <p class="text-center fs-6">Дата публикации: {{ resume.date }}</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-3">
+                <div class="d-flex flex-column mx-3">
+                    <a href="{% url 'resume_list' %}" class="btn btn-light border-2 border-white my-3">Мои резюме</a>
+                    <a href="" class="btn btn-primary my-3 border-2 border-white">Отклики</a>
+                    <a href="{% url 'resume_update'  resume.pk %}" class="btn btn-success my-3 border-2 border-white">Редактировать</a>
+                    {% if resume.status_resume == 'active' %}
+                        <a href="{% url 'resume_to_archive' resume.pk %}"
+                           class="btn btn-secondary my-3 border-2 border-white">Перенести в
+                            архив</a>
+                    {% else %}
+                        <a href="{% url 'resume_to_active' resume.pk %}"
+                           class="btn btn-secondary my-3 border-2 border-white">Перенести из
+                            архива</a>
+                    {% endif %}
+
+                    <a type="button" class="btn btn-danger my-2 border-2 border-white" data-bs-toggle="modal"
+                       data-bs-target="#exampleModal">
+                        Удалить
+                    </a>
+
+                    <!-- Модальное окно -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-warning" id="exampleModalLabel">Удалить резюме?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Закрыть"></button>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <a type="button" class="btn btn-secondary border-white" data-bs-dismiss="modal">Отмена
+                                    </a>
+                                    <a href="{% url 'resume_delete' resume.pk %}" type="button"
+                                       class="btn btn-danger border-white">Удалить</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'core/js/resume.js' %}"></script>
+    {% include 'include/footer.html' %}
+{% endblock content %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Мои резюме{% endblock title %}
+{% load crispy_forms_tags %}
+{% load categories_tags %}
+
+{% block content %}
+
+
+
+
+    <div class="container-fluid mt-5 font-monospace">
+        <div class="row my-3">
+            <div class="col-md-3 position-static">
+                <div class="mx-3 mt-3">
+                    {% show_categories %}
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="container">
+                    <h2 class="text-center text-warning border-bottom">Все вакансии </h2>
+                    {% if vacancies %}
+                        {% for vacancy in vacancies %}
+
+                            <div class="d-flex flex-row pt-3 justify-content-between border-bottom mb-3">
+                                <div class="d-flex flex-column">
+                                    <a class="text-decoration-none"
+                                       href="{% url 'users:account' vacancy.company.account.slug %}"><h5
+                                            class="text-danger">
+                                        {{ vacancy.company.account.fullname }}</h5>
+                                    </a>
+
+                                    <div><h6>Должность: {{ vacancy.job_title }}</h6></div>
+                                    <div>ЗП: {{ vacancy.min_price }} - {{ vacancy.max_price }} руб.</div>
+                                    <div><p class="text-success">Стэк: {{ vacancy.stack.all|join:',  ' }}</p></div>
+                                    <div><p class="">Требуемый опыт: {{ vacancy.required_experience }}</p></div>
+                                </div>
+
+
+                                <div class="d-flex flex-column">
+                                    <a class="text-decoration-none py-2 btn btn-primary border-2 border-white"
+                                       href="{% url 'vacancies_detail' vacancy.pk %}">Смотреть</a>
+                                    <a class="text-decoration-none py-2 btn btn-warning my-2 border-2 border-white"
+                                       href="{% url 'vacancies_detail' vacancy.pk %}">В избранное</a>
+                                    <a class="text-decoration-none py-2 btn btn-danger  border-2 border-white"
+                                       href="{% url 'vacancies_detail' vacancy.pk %}">Убрать из избранного</a>
+                                </div>
+
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>У пользователя нет опубликованных резюме</p>
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+
+        </div>
+   <div>
+            {% include 'include/footer.html' %}
+
+{% endblock content %}

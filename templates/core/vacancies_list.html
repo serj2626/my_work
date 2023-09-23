@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Вакансии{% endblock title %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <div class="container-fluid font-monospace my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="text-center text-warning"> Мои Вакансии</h1>
+                {% if  requset.user == all_vacancies.company %}
+                    <div class="justify-content-center">
+                      <a class="text-center text-decoration-none" href="{% url 'vacancies_add' %}">Создать
+                        вакансию</a>
+                    </div>
+
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="container mt-5 font-monospace">
+        <div class="row my-3">
+            {% if all_vacancies %}
+                {% for vacansy in all_vacancies %}
+                    <div class="col-md-4">
+                        <a href="{% url 'vacancies_detail' vacansy.pk %}" class="text-decoration-none">
+                            <div class="card text-white bg-info mb-3 border-3 border-warning"
+                                 style="max-width: 20rem;">
+                                <div class="card-header text-center fs-6"> {{ vacansy.job_title }}</div>
+                                <div class="card-body bg-white text-warning">
+                                    <p class="card-title text-center">{{ vacansy.min_price }} - {{ vacansy.max_price }}
+                                        руб.</p>
+                                    <p class="card-text text-center ">{{ vacansy.date }}</p>
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+            {% else %}
+                <p>У вас пока нет готовых резюме. Может пришло время создать?</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

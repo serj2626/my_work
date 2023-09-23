@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'core/css/home.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+    <div class="container font-monospace mt-5 text-center">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6 mt-5">
+                {% if request.user.type == 'person' %}
+
+                    <form action="">
+                        <input type="text" name="work"
+                               class="rounded-pill text-center py-3 border-3 border-warning w-100 shadow-lg"
+                               placeholder="Введите должность">
+                        <button type="submit" class="btn btn-info text-white my-3 py-2 border-2 border-white fs-5">Найти
+                            работу
+                        </button>
+                    </form>
+                {% elif  request.user.type == 'company' %}
+                    <form action="">
+                        <input type="text" name="work"
+                               class="rounded-pill text-center py-3 border-3 border-warning w-100 shadow-lg"
+                               placeholder="Введите стек технологий">
+                        <button type="submit" class="btn btn-info text-white my-3 py-2 border-2 border-white fs-5">Найти
+                            сотрдуника
+                        </button>
+                    </form>
+                {% else %}
+                    <div class="alert">
+                        <a class="text-decoration-none ntm btn-info px-5 py-3 fs-4 rounded-pill text-center" href="admin/">Админ-панель</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>
+{% endblock content %}
+
+
+{% block footer %}
+
+{% endblock footer %}
